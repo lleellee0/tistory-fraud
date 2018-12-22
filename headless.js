@@ -1,6 +1,6 @@
 const HCCrawler = require('headless-chrome-crawler');
 
-const requestPost = async (requestObjArr) => {
+const requestPost = async (requestObjArr, isMobile) => {
   (async () => {
     let launchObj = {};
     launchObj.onSuccess = (result => {
@@ -29,6 +29,7 @@ const requestPost = async (requestObjArr) => {
                 ad: $('#landingLink').click(),
               }));
         }
+        if(isMobile) queueObj.device = 'Nexus 7';
         await crawler.queue(queueObj); // , maxDepth: maxDepth, referer: referer, delay: milliseconds
     }
 

@@ -74,7 +74,7 @@ const crawlData = async (tistoryUrl) => {
     // });
 }
 
-const startFraud = () => {
+const startFraud = (isMobile) => {
     for(let i = 0; i < postObjArr.length; i++) {
         requestObjArr.push({
             url:`https://iwantadmin.tistory.com${postObjArr[i].url}`, 
@@ -88,13 +88,13 @@ const startFraud = () => {
         console.log(`${requestObjArr[i].url}\t${requestObjArr[i].referer}\t${requestObjArr[i].delay}\t${requestObjArr[i].isLike}\t${requestObjArr[i].isAd}`);
     }
     
-    headless.requestPost(requestObjArr);
+    headless.requestPost(requestObjArr, isMobile);
 }
 
-const main = async (tistoryUrl) => {    // like "http://iwantadmin.tistory.com"
+const main = async (tistoryUrl, isMobile) => {    // like "http://iwantadmin.tistory.com"
     await crawlData(tistoryUrl);
     await delay(5000);
-    await startFraud();
+    await startFraud(isMobile);
 };
 
-main("http://iwantadmin.tistory.com");
+main("http://iwantadmin.tistory.com", false);
