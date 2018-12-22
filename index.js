@@ -18,6 +18,25 @@ let requestObjArr = new Array(); // url, maxDepth, referer, delay, device, isLik
 
 let postObjArr = new Array();
 let refererArray = new Array();
+// url 인코딩 : encodeURI(uri);
+// 네이버 : https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=IPFS+-+%ED%8C%8C%EC%9D%BC%2F%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC+%EC%97%85%EB%A1%9C%EB%93%9C
+// 다음 : https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=IPFS+-+%ED%8C%8C%EC%9D%BC%2F%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC+%EC%97%85%EB%A1%9C%EB%93%9C
+// 구글 : https://www.google.com/
+// 네이버 다음 구글 비율 : 1 : 2 : 7 => 4 : 8 : 28
+// 검색유입 직접유입 비율 : 40 : 60
+// 0~4 네이버
+// 4~12 다음
+// 12~40 구글
+// 40~100 직접유입
+
+const getReferer = (keyword) => {
+    let dice = getOneToHundred();
+    if(dice < 4) return "https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=" + encodeURI(keyword);
+    else if(dice < 12) return "https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=" + encodeURI(keyword);
+    else if(dice < 40) return "https://www.google.com/";
+    else if(dice < 100) return null;
+}
+
 
 const crawlData = async (tistoryUrl) => {
     let lastPageNumber = 0;
@@ -61,13 +80,13 @@ const startFraud = () => {
         requestObjArr.push({
             url:`https://iwantadmin.tistory.com${postObjArr[i].url}`, 
             maxDepth:1,
-            referer:"https://www.google.com/",
-            delay:60000 + (getOneToHundred() * 100),
+            referer:getReferer(postObjArr[i].title),
+            delay:70000 + (getOneToHundred() * 100),
             device:null,
             isLike:getBooleanByPercentage(0.03),
             isAd:getBooleanByPercentage(0.01)
         });
-        // console.log(requestObjArr[i]);
+        console.log(`${requestObjArr[i].url}\t${requestObjArr[i].referer}\t${requestObjArr[i].delay}\t${requestObjArr[i].isLike}\t${requestObjArr[i].isAd}`);
     }
     
     headless.requestPost(requestObjArr);

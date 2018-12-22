@@ -4,7 +4,7 @@ const requestPost = async (requestObjArr) => {
   (async () => {
     let launchObj = {};
     launchObj.onSuccess = (result => {
-      console.log(result.response.url);
+       console.log(`${result.response.status} ${result.response.url} ${result.response.headers.date}`);
     });
     launchObj.maxConcurrency = 1;
     const crawler = await HCCrawler.launch(launchObj);
