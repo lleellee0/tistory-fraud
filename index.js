@@ -17,7 +17,6 @@ const delay = (milliseconds) => {
 let requestObjArr = new Array(); // url, maxDepth, referer, delay, device, isLike, isAd
 
 let postObjArr = new Array();
-let refererArray = new Array();
 // url 인코딩 : encodeURI(uri);
 // 네이버 : https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=IPFS+-+%ED%8C%8C%EC%9D%BC%2F%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC+%EC%97%85%EB%A1%9C%EB%93%9C
 // 다음 : https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=IPFS+-+%ED%8C%8C%EC%9D%BC%2F%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC+%EC%97%85%EB%A1%9C%EB%93%9C
