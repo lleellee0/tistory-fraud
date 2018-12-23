@@ -74,27 +74,27 @@ const crawlData = async (tistoryUrl) => {
     // });
 }
 
-const startFraud = () => {
+const startFraud = (isMobile) => {
     for(let i = 0; i < postObjArr.length; i++) {
         requestObjArr.push({
-            url:`https://iwantadmin.tistory.com${postObjArr[i].url}`, 
+            url:`http://iwantadmin.tistory.com${postObjArr[i].url}`, 
             maxDepth:1,
-            referer:getReferer(postObjArr[i].title),
+            extraHeaders: {'Referer':getReferer(postObjArr[i].title), 'User-Agent':"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"},
             delay:70000 + (getOneToHundred() * 100),
             device:null,
             isLike:getBooleanByPercentage(0.03),
             isAd:getBooleanByPercentage(0.01)
         });
-        console.log(`${requestObjArr[i].url}\t${requestObjArr[i].referer}\t${requestObjArr[i].delay}\t${requestObjArr[i].isLike}\t${requestObjArr[i].isAd}`);
+        console.log(`${requestObjArr[i].url}\t${requestObjArr[i].extraHeaders.Referer}\t${requestObjArr[i].delay}\t${requestObjArr[i].isLike}\t${requestObjArr[i].isAd}`);
     }
     
-    headless.requestPost(requestObjArr);
+    headless.requestPost(requestObjArr, isMobile);
 }
 
-const main = async (tistoryUrl) => {    // like "http://iwantadmin.tistory.com"
+const main = async (tistoryUrl, isMobile) => {    // like "http://iwantadmin.tistory.com"
     await crawlData(tistoryUrl);
-    await delay(5000);
-    await startFraud();
+    await delay(10000);
+    await startFraud(isMobile);
 };
 
-main("http://iwantadmin.tistory.com");
+main("http://iwantadmin.tistory.com", false);
