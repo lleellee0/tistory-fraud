@@ -19,8 +19,8 @@ const puppeteer = require('puppeteer');
 //     console.log(`https://iwantadmin.tistory.com/${i}`);
 //     await delay(0);
 //   }
-await page.goto(`https://iwantadmin.tistory.com/3`, {referer : 'https://search.naver.com/search.naver?sm=top_hty&fbm=1&ie=utf8&query=달고나문서'});
-await page.goto(`https://iwantadmin.tistory.com/3`, {referer : 'https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=%EB%8B%AC%EA%B3%A0%EB%82%98'});
+await page.goto(`https://iwantadmin.tistory.com/3`, {referer : 'https://search.naver.com/search.naver?sm=top_hty&fbm=0&ie=utf8&query=%EB%8B%AC%EA%B3%A0%EB%82%98+PDF'});
+await page.goto(`https://iwantadmin.tistory.com/3`, {referer : 'https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=%EB%8B%AC%EA%B3%A0%EB%82%98+PDF'});
 
   await browser.close();
 })();
