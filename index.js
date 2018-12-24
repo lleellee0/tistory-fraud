@@ -93,27 +93,51 @@ const crawlData = async (tistoryUrl) => {
     // });
 }
 
-const startFraud = (isMobile) => {
+const startFraud = (isMobile, delay) => {
     for(let i = 0; i < postObjArr.length; i++) {
         requestObjArr.push({
             url:`http://iwantadmin.tistory.com${postObjArr[i].url}`, 
             maxDepth:1,
             extraHeaders: {'Referer':getReferer(getKeywordByTitle(postObjArr[i].title, postObjArr[i].excerpt)), 'User-Agent':"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"},
-            delay:70000 + (getOneToHundred() * 100),
+            delay:delay + (getOneToHundred() * 100),
             device:null,
             isLike:getBooleanByPercentage(0.03),
             isAd:getBooleanByPercentage(0.01)
         });
         console.log(`${requestObjArr[i].url}\t${requestObjArr[i].extraHeaders.Referer}\t${requestObjArr[i].delay}\t${requestObjArr[i].isLike}\t${requestObjArr[i].isAd}`);
     }
+
+    console.log(`isMobile : ${isMobile}, delay : ${delay}`);
     
     headless.requestPost(requestObjArr, isMobile);
 }
 
-const main = async (tistoryUrl, isMobile) => {    // like "http://iwantadmin.tistory.com"
+const main = async (tistoryUrl, isMobile, delay_) => {    // like "http://iwantadmin.tistory.com"
     await crawlData(tistoryUrl);
     await delay(10000);
-    await startFraud(isMobile);
+    await startFraud(isMobile, delay_);
 };
 
-main("http://iwantadmin.tistory.com", false);
+let isMobile;
+
+const argsCheck = () => {
+    if(process.argv.length === 4) {
+        if(process.argv[2] === "true" || process.argv[2] === "false") {
+            if(process.argv[2] === "true")
+                isMobile = true;
+            else
+                isMobile = false;
+            return 0;
+        }
+    }
+    console.log("invalid command.");
+    console.log("node index.js isMobile delay");
+    console.log("isMobile : true or false");
+    console.log("delay : request delay(millisecond) recommand >= 30000");
+    console.log("ex)");
+    console.log("\t\tnode index.js false 30000");
+    return 1;
+}
+
+if(argsCheck() === 0)
+    main("http://iwantadmin.tistory.com", isMobile, parseInt(process.argv[3]));
