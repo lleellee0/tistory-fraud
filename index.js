@@ -1,4 +1,4 @@
-const request = require('request');
+﻿const request = require('request');
 const cheerio = require('cheerio');
 const headless = require('./headless');
 
@@ -8,6 +8,10 @@ const getBooleanByPercentage = (percentage) => {
 
 const getOneToHundred = () => {
     return parseInt(Math.random() * 100);
+}
+
+const getRandomArrayIndex = (arrayLength) => {
+    return parseInt(Math.random() * arrayLength);
 }
 
 const delay = (milliseconds) => {
@@ -34,6 +38,21 @@ const getReferer = (keyword) => {
     else if(dice < 12) return "https://search.daum.net/search?w=tot&DA=YZR&t__nil_searchbox=btn&sug=&sugo=&q=" + encodeURI(keyword);
     else if(dice < 40) return "https://www.google.com/";
     else if(dice < 100) return null;
+}
+
+const getKeywordByTitle = (title, excerpt) => {
+    let str = title.replace("[", "").replace("]", "").replace("(", "").replace(")", "").split(" ");
+
+    if(str.length < 2) {    // 제목이 너무 짧은경우
+        str = excerpt.split(" ");
+        if(str.length < 2)  // 내용도 짧은 경우
+            return title;   // 그냥 제목을 리턴함.
+        else
+            return str[getRandomArrayIndex(str.length)] + " " + str[getRandomArrayIndex(str.length)]  // 내용중에 단어 2개 결합
+    } else {             // 제목이 2단어 이상인 경우
+        let randomNumber = getRandomArrayIndex(str.length - 1);
+        return str[randomNumber] + " " + str[randomNumber + 1];       // 제목에서 단어를 N N+1 로 결합하여 키워드 선정
+    }
 }
 
 
@@ -79,7 +98,7 @@ const startFraud = (isMobile) => {
         requestObjArr.push({
             url:`http://iwantadmin.tistory.com${postObjArr[i].url}`, 
             maxDepth:1,
-            extraHeaders: {'Referer':getReferer(postObjArr[i].title), 'User-Agent':"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"},
+            extraHeaders: {'Referer':getReferer(getKeywordByTitle(postObjArr[i].title, postObjArr[i].excerpt)), 'User-Agent':"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"},
             delay:70000 + (getOneToHundred() * 100),
             device:null,
             isLike:getBooleanByPercentage(0.03),
