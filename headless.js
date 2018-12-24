@@ -4,7 +4,7 @@ const requestPost = async (requestObjArr, isMobile) => {
   (async () => {
     let launchObj = {};
     launchObj.onSuccess = (result => {
-       console.log(`${result.response.status} ${result.response.url} ${result.response.headers.date}`);
+       console.log(`${result.response.status} ${result.response.url} ${result.response.headers.date} ${result.options.extraHeaders.Referer} like:${result.options.isLike} ad:${result.options.isAd}`);
     });
     launchObj.maxConcurrency = 1;
     const crawler = await HCCrawler.launch(launchObj);
