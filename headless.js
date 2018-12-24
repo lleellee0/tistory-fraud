@@ -4,7 +4,10 @@ const requestPost = async (requestObjArr, isMobile) => {
   (async () => {
     let launchObj = {};
     launchObj.onSuccess = (result => {
-       console.log(`${result.response.status} ${result.response.url} ${result.response.headers.date} ${result.options.extraHeaders.Referer} like:${result.options.isLike} ad:${result.options.isAd}`);
+        if(result.options.extraHeaders.Referer === undefined)
+        result.options.extraHeaders.Referer = null; // null이 들어가는게 좀 더 명시적인 느낌이라 변경.
+        
+       console.log(`${result.response.status} ${result.response.url} ${result.response.headers.date} referer:${result.options.extraHeaders.Referer} like:${result.options.isLike} ad:${result.options.isAd}`);
     });
     launchObj.maxConcurrency = 1;
     const crawler = await HCCrawler.launch(launchObj);
@@ -12,8 +15,13 @@ const requestPost = async (requestObjArr, isMobile) => {
 
     // Queue multiple requests
     for(let i = 0; i < requestObjArr.length; i++) {
+        // referer 없는 요청이 날아가지 않는 버그 수정
+        if(requestObjArr[i].extraHeaders.Referer === null)
+            delete requestObjArr[i].extraHeaders.Referer;
+
         let queueObj = requestObjArr[i];
         // console.log(queueObj);
+
         queueObj.evaluatePage = null;
         if(queueObj.isLike === true && queueObj.isAd === false) {
             queueObj.evaluatePage = (() => ({
