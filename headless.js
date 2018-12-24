@@ -37,8 +37,11 @@ const requestPost = async (requestObjArr, isMobile) => {
                 ad: $('#landingLink').click(),
               }));
         }
-        if(isMobile) queueObj.device = 'Nexus 7';
-        await crawler.queue(queueObj); // , maxDepth: maxDepth, referer: referer, delay: milliseconds
+        if(isMobile) {
+            delete requestObjArr[i].extraHeaders['User-Agent'];
+            queueObj.device = 'Nexus 7';
+        }
+        await crawler.queue(queueObj); // , maxDepth: maxDepth, delay: milliseconds
     }
 
     await crawler.onIdle(); // Resolved when no queue is left
