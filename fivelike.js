@@ -18,4 +18,4 @@ const fiveLike = async (url) => {
   await crawler.close(); // Close the crawler
 };
 
-fiveLike("http://iwantadmin.tistory.com/252");
+fiveLike("http://iwantadmin.tistory.com/253");
