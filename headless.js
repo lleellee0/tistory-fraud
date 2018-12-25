@@ -47,15 +47,6 @@ const requestPost = async (requestObjArr, isMobile) => {
   })();
 }
 
-// requestPost(`https://iwantadmin.tistory.com/`,
-//   1,
-//   "https://www.google.com/",
-//   10000,
-//   null,
-//   true,
-//   false
-// );
-
 module.exports = {
     requestPost: requestPost
 }

@@ -84,13 +84,6 @@ const crawlData = async (tistoryUrl) => {
             }
         });
     }
-    // await request(tistoryUrl + `?page=1`, (err, res, body) => {
-    //     if(err) return console.log(err);
-    //     const $ = cheerio.load(body);
-    //     // console.log($('.post-item a')[0].attribs.href);    // URL
-    //     // console.log($('.post-item .title')[0].children[0].data);    // TITLE
-    //     // console.log($('.post-item .excerpt')[0].children[0].data);    // EXCERPT
-    // });
 }
 
 const startFraud = (isMobile, delay) => {
