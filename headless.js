@@ -21,9 +21,7 @@ const requestPost = async (requestObjArr, isMobile) => {
             delete requestObjArr[i].extraHeaders.Referer;
 
         let queueObj = requestObjArr[i];
-        // console.log(queueObj);
-        if(i === 0)
-            queueObj.isAd = true;
+
         queueObj.evaluatePage = null;
         if(queueObj.isLike === true && queueObj.isAd === false) {
             queueObj.evaluatePage = (() => ({

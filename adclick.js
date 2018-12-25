@@ -10,7 +10,7 @@ const delay = (milliseconds) => {
 // x : 340, y : 507 지점까지 광고 있음.
 
 const adClick = async (url, userAgent, count) => {
-  await delay(50000 * count - 1);       // 너무 빨리 요청이 발생하지 않도록
+  await delay(50000 * count);       // 너무 빨리 요청이 발생하지 않도록
   const browser = await puppeteer.launch({headless: false});
   const page = await browser.newPage();
   await browser.userAgent(userAgent);
