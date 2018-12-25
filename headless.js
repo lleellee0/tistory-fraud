@@ -1,4 +1,5 @@
 const HCCrawler = require('headless-chrome-crawler');
+const adClick = require('./adclick');
 
 const requestPost = async (requestObjArr, isMobile) => {
   (async () => {
@@ -14,28 +15,27 @@ const requestPost = async (requestObjArr, isMobile) => {
 
 
     // Queue multiple requests
-    for(let i = 0; i < requestObjArr.length; i++) {
+    for(let i = 0, count = 1; i < requestObjArr.length; i++) {
         // referer 없는 요청이 날아가지 않는 버그 수정
         if(requestObjArr[i].extraHeaders.Referer === null)
             delete requestObjArr[i].extraHeaders.Referer;
 
         let queueObj = requestObjArr[i];
         // console.log(queueObj);
-
+        if(i === 0)
+            queueObj.isAd = true;
         queueObj.evaluatePage = null;
         if(queueObj.isLike === true && queueObj.isAd === false) {
             queueObj.evaluatePage = (() => ({
                 like: $('.uoc-icon').click(),
               }));
         } else if(queueObj.isLike === false && queueObj.isAd === true) {
-            queueObj.evaluatePage = (() => ({
-                ad: $('#landingLink').click(),
-              }));
+              adClick.adClick(queueObj.url, queueObj.extraHeaders['User-Agent'], count++);
         } else if(queueObj.isLike === true && queueObj.isAd === true) {
             queueObj.evaluatePage = (() => ({
                 like: $('.uoc-icon').click(),
-                ad: $('#landingLink').click(),
               }));
+              adClick.adClick(queueObj.url, queueObj.extraHeaders['User-Agent'], count++);
         }
         if(isMobile) {
             delete requestObjArr[i].extraHeaders['User-Agent'];
